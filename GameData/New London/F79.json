@@ -1,0 +1,1 @@
+{"text":"You look around for clues… But you don’t find anything. That sucks you think to yourself. Oh well time to the one thing you were made to do, beat up walls.","skillmod":{"skill":"0","value":""},"exit":[{"trigger":"Look around for clues","check":{"skill":"","value":"0"},"out":"S1","fail":"W2"}]}
