@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slot Machine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="slotsStyle">
+    <script src='/socket.io/socket.io.js'></script>
+    <a style = "background-color: gold;font-size:200%;" href="gamble">Return Home</a>
+</head>
+<body>
+        <audio loop autoplay>
+    <source src="shanty2.mp3" type="audio/mpeg">
+</audio>
+<body bgcolor="#800000">
+
+    <h1  style ="color: gold;font-size:200%;" >Slot Machine</h1>
+    <div class="slot-container">
+        <div class="slot" id="slot1">?</div>
+        <div class="slot" id="slot2">?</div>
+        <div class="slot" id="slot3">?</div>
+    </div>
+    <button onclick="spin()">Spin</button>
+    <p id="result"></p>
+    <label for="betAmount">Enter your bet:</label>
+    <input type="number" id="betAmount" min="1" value="1">
+    <p id="score">Score: 100</p>
+
+<script src="../js/slots.js"></script>  
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<!--
+Shows use of forms.
+-->
+<head>
+
+<title>Second Forms Ex</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-3.1.1.min.js">
+</script>
+
+</head>
+<body bgcolor="#800000">
+<body>
+<h1 style = "color: gold;">Make a post</h1>
+<hr>
+<form action="#">
+<fieldset style = "width:50px">
+<div>
+
+<label style = "color: gold;" for="name">Name</label>
+<input id="name" type="text" value="">
+
+<br>
+	<label style = "color: gold;" for="uploader">Upload Image</label>
+  	<input id="uploader" type="file" name="image">  
+<br>
+  <label style = "color: gold;" for="comments">Caption</label>
+  <textarea name="comments" id="comments" style=" height:15px;"></textarea>
+</div>
+
+
+
+</fieldset>
+<input id="clearButton" type="button" value="Clear Form">
+<input onclick=setAction("Create") type="submit" value="Post"> 
+</form>
+
+
+  <ul id="list"></ul>  
+
+<script src="../js/home.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flip A Coin</title>
+      <meta charset="utf-8"/>
+    <style type="text/css">
+    </style>
+    <!--Google Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+    <script src='/socket.io/socket.io.js'></script>
+    <!--Stylesheet-->
+    <link rel="stylesheet" href="coinStyle">
+</head>
+<body>
+
+    <audio loop autoplay>
+    <source src="shanty2.mp3" type="audio/mpeg">
+</audio>
+
+    <div style = "position:relative; text-align:center;top:100px; ">
+     <a style = "background-color: gold;font-size:200%;" href="/gamble">Return Home</a>
+ </div>
+   
+    <div class="container">
+         <div class="score">
+            <p id="dablooms-count">College Fund: 1000</p>
+        </div>
+        <div class="stats">
+            <p id="heads-count">Heads: 0</p>
+            <p id="tails-count">Tails: 0</p>
+        </div>
+        <div class="coin" id="coin">
+            <div class="heads" >
+                <img src="heads.png">
+            </div>
+            <div class="tails" >
+                <img src="tails.png">
+            </div>
+        </div>
+        <div class="buttons">
+            <button id="flip-button">
+                Flip Coin
+            </button>
+            <button id="reset-button">
+                Reset
+            </button>
+            <button id="heads-button">
+                Heads
+            </button>
+            <button id="tails-button">
+                Tails
+            </button>
+        </div>
+        <div>
+    </div>
+    <div class="betTab">
+        <form action="#">
+            <legend>Bet Amount:</legend>
+            <div class="form-field">
+                <input id="bet-num" type="number" value="0">
+                <input id="bet-button" type="submit" name="submit" value="Bet">
+            </div>
+        </form>
+    </div>
+
+    <!--Script-->
+    <script>
+   let socket = io();
+    let heads = 0;
+    let tails = 0;
+    let selectedSide = null;
+    let coin = document.querySelector(".coin");
+    let flipBtn = document.querySelector("#flip-button");
+    let headsBtn = document.querySelector("#heads-button");
+    let tailsBtn = document.querySelector("#tails-button");
+    let resetBtn = document.querySelector("#reset-button");
+    let betBtn = document.querySelector("#bet-button");
+    let dablooms = Number(localStorage.getItem("money"));
+    document.querySelector("#dablooms-count").textContent = `Points: ${dablooms}`;
+
+    headsBtn.addEventListener("click", () => {
+        selectedSide = "heads";
+        console.log("heads clicked")
+        alert("You bet on heads!")
+    });
+
+    tailsBtn.addEventListener("click", () => {
+        selectedSide = "tails";
+        console.log("tails clicked")
+        alert("You bet on tails!")
+
+    });
+
+    betBtn.addEventListener("click", () => {
+        betNum = Number(parseInt(document.getElementById("bet-num").value));
+        if (betNum > dablooms)
+        {
+            alert("Not enough dablooms!");
+        }
+        else
+        {
+            alert("You bet " + betNum + " on " + selectedSide);
+            console.log("Bet Amount: " + betNum);
+        }
+    });
+
+
+    flipBtn.addEventListener("click", () => {
+        if (selectedSide === null) {
+            alert("Please select heads or tails before flipping the coin!");
+            return;
+        }
+
+        let betNum = parseInt(document.getElementById("bet-num").value);
+
+        let i = Math.random();
+
+        // Adjust bet amount based on the outcome
+        if(selectedSide === "heads" && i < 0.29)
+        {
+            setTimeout(function(){
+                coin.style.animation = "spin-heads 3s forwards";
+            }, 100);
+            heads++;
+            dablooms += +betNum;
+            localStorage.setItem("money",dablooms);
+        }
+        else if (selectedSide === "tails" && i >= 0.71)
+        {
+            setTimeout(function(){
+                coin.style.animation = "spin-tails 3s forwards";
+            }, 100);
+            tails++;
+            dablooms += +betNum;
+            localStorage.setItem("money",dablooms);
+        }
+        else
+        {
+             setTimeout(function(){
+                coin.style.animation = "spin-tails 3s forwards";
+            }, 100);
+            tails++;
+            dablooms -= +betNum;
+            localStorage.setItem("money",dablooms);
+        }
+
+        // Update dablooms display
+        document.querySelector("#dablooms-count").textContent = `Points: ${dablooms}`;
+        socket.emit('update', {'name': localStorage.getItem("user") ,'money': localStorage.getItem("money"), 'id':localStorage.getItem("id")});
+        setTimeout(updateStats, 3000);
+        disableButton();
+    });
+
+    function updateStats(){
+        document.querySelector("#heads-count").textContent = `Heads: ${heads}`;
+        document.querySelector("#tails-count").textContent = `Tails: ${tails}`;
+    }
+
+    function disableButton(){
+        flipBtn.disabled = true;
+        setTimeout(function(){
+            flipBtn.disabled = false;
+        },3000);
+    }
+
+    resetBtn.addEventListener("click",() => {
+        coin.style.animation = "none";
+        heads = 0;
+        tails = 0;
+        updateStats();
+    });
+
+    </script>
+   
+</body>
+</html>
